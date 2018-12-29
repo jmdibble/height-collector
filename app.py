@@ -4,6 +4,7 @@ from send_email import send_email
 from sqlalchemy.sql import func
 
 app = Flask(__name__)
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 # app.config["SQLALCHEMY_DATABASE_URI"]="postgresql://postgres:postgres123@localhost/height_collector"
 app.config["SQLALCHEMY_DATABASE_URI"]="postgres://skwjmwsxlsjtbc:34f00576d7a2ecfad20fcf9fe12aa5b40c8af5d7ec291af954fdb39ddc2f2b5b@ec2-54-225-150-216.compute-1.amazonaws.com:5432/d74c1ifhk7v6t7?sslmode=require"
 db = SQLAlchemy(app)
@@ -27,7 +28,6 @@ def success():
     if request.method == "POST":
         email = request.form["email_name"]
         height = request.form["height_name"]
-
         if db.session.query(Data).filter(Data.email_ == email).count() == 0:
             data = Data(email, height)
             db.session.add(data)
